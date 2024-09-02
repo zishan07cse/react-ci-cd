@@ -44,8 +44,8 @@ jobs:
 
       - name: Merge feature branch into dev
         run: |
-          git config --global user.name 'GitHub Actions'
-          git config --global user.email 'actions@github.com'
+          git config --global user.name 'zishan07cse'
+          git config --global user.email 'zishan07csecuet@gmail.com'
           git checkout dev
           git pull origin dev
           git merge ${{ github.ref }}
