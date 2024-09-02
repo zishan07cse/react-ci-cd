@@ -48,12 +48,10 @@ jobs:
           git config --global user.email 'zishan07csecuet@gmail.com'
 
       - name: Fetch all branches
-        run: |
-          git fetch --all
+        run: git fetch --all
 
       - name: Checkout dev branch
-        run: |
-          git checkout dev
+        run: git checkout dev
 
       - name: Merge feature branch into dev
         run: |
