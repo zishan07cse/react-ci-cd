@@ -8,7 +8,23 @@ on:
 jobs:
   build-and-merge:
     runs-on: ubuntu-latest
+  services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: homestead
+          MYSQL_USER: root
+          MYSQL_PASSWORD: root
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping --silent" --health-interval=10s --health-timeout=5s --health-retries=5
 
+      selenium:
+        image: seleniarm/standalone-chromium:latest
+        ports:
+          - 4444:4444
+        options: --health-cmd="curl -f http://localhost:4444/wd/hub/status || exit 1" --health-interval=10s --health-timeout=5s --health-retries=5
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
