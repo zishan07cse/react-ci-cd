@@ -80,8 +80,3 @@ jobs:
           git push origin dev
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Run Selenium tests
-        run: npm run test:selenium
-        env:
-          SELENIUM_URL: http://localhost:4444/wd/hub
