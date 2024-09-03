@@ -1,4 +1,4 @@
-name: CI
+name: React CI Test
 
 on:
   push:
@@ -8,7 +8,8 @@ on:
 jobs:
   build-and-merge:
     runs-on: ubuntu-latest
-  services:
+
+    services:
       mysql:
         image: mysql:8.0
         env:
@@ -25,6 +26,7 @@ jobs:
         ports:
           - 4444:4444
         options: --health-cmd="curl -f http://localhost:4444/wd/hub/status || exit 1" --health-interval=10s --health-timeout=5s --health-retries=5
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -78,3 +80,8 @@ jobs:
           git push origin dev
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Run Selenium tests
+        run: npm run test:selenium
+        env:
+          SELENIUM_URL: http://localhost:4444/wd/hub
