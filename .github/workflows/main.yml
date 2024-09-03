@@ -41,10 +41,24 @@ jobs:
       - name: Checkout dev branch
         run: git checkout dev
 
-      - name: Automerge feature branch into dev
-        uses: mtanzi/action-automerge@v1
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          source: '${{ github.head_ref }}'
-          target: 'dev'
-    
+      - name: Merge feature branch into dev
+        run: |
+          # Extract the branch name from the ref
+          branch_name=$(echo "${{ github.ref }}" | sed 's/refs\/heads\///')
+
+          # Check if the branch name is valid
+          if [ -z "$branch_name" ]; then
+            echo "Branch name is empty. Exiting."
+            exit 1
+          fi
+
+          # Ensure dev branch is up-to-date
+          git pull origin dev
+
+          # Merge the feature branch into dev
+          git merge origin/$branch_name --no-ff -m "Merge feature branch '$branch_name' into dev"
+
+          # Push changes to dev
+          git push origin dev
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
