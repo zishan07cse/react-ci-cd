@@ -1,15 +1,12 @@
-name: CI
+name: Auto-Merge Feature Branch to Dev
 
 on:
   push:
     branches:
       - 'feature-*'  # Triggers on feature branches
-  pull_request:
-    branches:
-      - dev  # Triggers on pull requests to dev branch
 
 jobs:
-  build:
+  build-and-merge:
     runs-on: ubuntu-latest
 
     steps:
@@ -32,15 +29,6 @@ jobs:
 
       - name: Build project
         run: npm run build
-
-  merge:
-    runs-on: ubuntu-latest
-    needs: build
-    if: github.ref != 'refs/heads/dev' && github.event_name == 'push' && success() # Only merge if build passed
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
 
       - name: Set Git user
         run: |
