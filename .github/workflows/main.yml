@@ -1,0 +1,45 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - 'feature-*'  # Triggers on feature branches
+  pull_request:
+    branches:
+      - 'dev'  # Triggers on pull requests to dev branch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'  # Specify the Node.js version you are using
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Lint code
+        run: npm run lint
+
+      - name: Run unit tests
+        run: npm test -- --coverage
+
+      - name: Build project
+        run: npm run build
+  merge-branch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+
+      - name: Merge staging -> uat
+        uses: devmasx/merge-branch@master
+        with:
+          type: now
+          target_branch: dev
+          github_token: ${{ secrets.GITHUB_TOKEN }}
